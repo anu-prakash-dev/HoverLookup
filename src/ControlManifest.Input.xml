@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest>
+  <control namespace="CrmtechControls" constructor="HoverLookup" version="0.0.1" display-name-key="HoverLookup" description-key="HoverLookup description" control-type="standard" >
+    <external-service-usage enabled="false">
+    </external-service-usage>
+    <property name="lookup" display-name-key="Lookup Field" of-type="Lookup.Simple" description-key="HoverLookup_Lookup_Description" usage="bound" required="true"/>
+    <resources>
+      <code path="index.ts" order="1"/>
+    </resources>
+    <feature-usage>
+      <uses-feature name="Utility" required="true" />
+      <uses-feature name="WebAPI" required="true" />
+    </feature-usage>
+  </control>
+</manifest>
