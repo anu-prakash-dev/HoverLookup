@@ -70,9 +70,9 @@ export class CtkLookupControl extends LitElement {
         <fluent-text-field
           placeholder="Search accounts"
           @input=${this.onSearch}
-          id="lookup-input"
+          class="lookup-input"
         >
-        <fluent-button slot="end" appearance="stealth" @click=${this.openLookupDialog}>
+        <fluent-button slot="end" appearance="stealth" @click=${this.onSearch}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6" width="24" height="24">
   <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
 </svg>
@@ -102,7 +102,7 @@ export class CtkLookupControl extends LitElement {
 
                 </fluent-button>
         <!-- <fluent-button slot="end" appearance="transparent" @click=${this.openLookupDialog}>🔍</fluent-button> -->
-        <fluent-button slot="end" appearance="stealth" @click=${this.openLookupDialog}>
+        <fluent-button slot="end" appearance="stealth" @click=${this.onSearch}>
           
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6" width="24" height="24">
   <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -183,9 +183,14 @@ export class CtkLookupControl extends LitElement {
   }
 
   onSearch(e: Event) {
-    const input = e.target as HTMLInputElement;
-    this.search = input.value;
-    if (this.search.length >= 2) {
+    //const input = e.target as HTMLInputElement;
+    const input = this.renderRoot.querySelector('.lookup-input') as HTMLInputElement
+    if (!input) {
+      this.search = '';
+    } else {
+      this.search = input.value;
+    }
+    if (this.search.length >= 3 || this.search.length === 0) {
       this.context.webAPI
         .retrieveMultipleRecords(
           'account',
@@ -193,7 +198,7 @@ export class CtkLookupControl extends LitElement {
         )
         .then((res: any) => {
           this.records = res.entities;
-          this.showDropdownFloating(input);
+          this.showDropdown(input);
         })
         .catch((err: unknown) => console.error('Fetch failed', err));
     } else {
@@ -202,7 +207,7 @@ export class CtkLookupControl extends LitElement {
     }
   }
 
-  showDropdownFloating(input: HTMLInputElement) {
+  showDropdown(input: HTMLInputElement) {
     this.removeDropdown();
 
     const rect = input.getBoundingClientRect();
